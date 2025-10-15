@@ -10,70 +10,70 @@ set -e
 
 # Colors for output
 
-RED=’\033[0;31m’
-GREEN=’\033[0;32m’
-YELLOW=’\033[1;33m’
-BLUE=’\033[0;34m’
-CYAN=’\033[0;36m’
-NC=’\033[0m’ # No Color
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+YELLOW='\033[1;33m'
+BLUE='\033[0;34m'
+CYAN='\033[0;36m'
+NC='\033[0m' # No Color
 
 # Configuration
 
-SCRIPT_DIR=”$(cd “$(dirname “${BASH_SOURCE[0]}”)” && pwd)”
-REPORT_DIR=”${SCRIPT_DIR}/reports/multi-env-$(date +%Y%m%d_%H%M%S)”
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+REPORT_DIR="${SCRIPT_DIR}/reports/multi-env-$(date +%Y%m%d_%H%M%S)"
 TIMESTAMP=$(date +%Y%m%d_%H%M%S)
 
 # Test environments
 
 declare -A ENVIRONMENTS=(
-[“ubuntu-2204”]=“ssh://testuser@localhost:2222”
-[“ubuntu-2004”]=“ssh://testuser@localhost:2223”
-[“centos-8”]=“ssh://testuser@localhost:2224”
-[“debian-11”]=“ssh://testuser@localhost:2225”
-[“secure-baseline”]=“ssh://secureuser@localhost:2226”
+["ubuntu-2204"]="ssh://testuser@localhost:2222"
+["ubuntu-2004"]="ssh://testuser@localhost:2223"
+["centos-8"]="ssh://testuser@localhost:2224"
+["debian-11"]="ssh://testuser@localhost:2225"
+["secure-baseline"]="ssh://secureuser@localhost:2226"
 )
 
 declare -A PASSWORDS=(
-[“ubuntu-2204”]=“testpass123”
-[“ubuntu-2004”]=“testpass123”
-[“centos-8”]=“testpass123”
-[“debian-11”]=“testpass123”
-[“secure-baseline”]=“SecurePass123!”
+["ubuntu-2204"]="testpass123"
+["ubuntu-2004"]="testpass123"
+["centos-8"]="testpass123"
+["debian-11"]="testpass123"
+["secure-baseline"]="SecurePass123!"
 )
 
 # Functions
 
 print_header() {
-echo -e “${CYAN}”
-echo “==========================================================”
-echo “  Multi-Environment InSpec Security Testing”
-echo “  Testing against ${#ENVIRONMENTS[@]} environments”
-echo “==========================================================”
-echo -e “${NC}”
+echo -e "${CYAN}"
+echo "=========================================================="
+echo "  Multi-Environment InSpec Security Testing"
+echo "  Testing against ${#ENVIRONMENTS[@]} environments"
+echo "=========================================================="
+echo -e "${NC}"
 }
 
 print_section() {
-echo -e “\n${BLUE}==== $1 ====${NC}\n”
+echo -e "\n${BLUE}==== $1 ====${NC}\n"
 }
 
 print_success() {
-echo -e “${GREEN}✓ $1${NC}”
+echo -e "${GREEN}✓ $1${NC}"
 }
 
 print_error() {
-echo -e “${RED}✗ $1${NC}”
+echo -e "${RED}✗ $1${NC}"
 }
 
 print_warning() {
-echo -e “${YELLOW}⚠ $1${NC}”
+echo -e "${YELLOW}⚠ $1${NC}"
 }
 
 print_info() {
-echo -e “${CYAN}ℹ $1${NC}”
+echo -e "${CYAN}ℹ $1${NC}"
 }
 
 check_prerequisites() {
-print_section “Checking Prerequisites”
+print_section "Checking Prerequisites"
 
 ```
 # Check InSpec
@@ -108,7 +108,7 @@ fi
 }
 
 start_test_environments() {
-print_section “Starting Test Environments”
+print_section "Starting Test Environments"
 
 ```
 # Check if containers are already running
@@ -136,8 +136,8 @@ done
 }
 
 create_report_directory() {
-mkdir -p “${REPORT_DIR}”
-print_success “Report directory created: ${REPORT_DIR}”
+mkdir -p "${REPORT_DIR}"
+print_success "Report directory created: ${REPORT_DIR}"
 }
 
 test_environment() {
@@ -193,7 +193,7 @@ echo ""
 }
 
 generate_summary_report() {
-print_section “Generating Summary Report”
+print_section "Generating Summary Report"
 
 ```
 local summary_file="${REPORT_DIR}/SUMMARY.md"
@@ -293,7 +293,7 @@ print_success "Summary report generated: ${summary_file}"
 }
 
 open_reports() {
-print_section “Opening Reports”
+print_section "Opening Reports"
 
 ```
 # Try to open the summary in default browser/editor
@@ -310,7 +310,7 @@ print_info "Open SUMMARY.md for overview"
 }
 
 cleanup() {
-print_section “Cleanup”
+print_section "Cleanup"
 
 ```
 read -p "Stop and remove test containers? (y/N) " -n 1 -r
@@ -358,8 +358,9 @@ cleanup
 
 # Handle script interruption
 
-trap ‘echo -e “\n${RED}Script interrupted${NC}”; exit 1’ INT TERM
+trap 'echo -e "\n${RED}Script interrupted${NC}"; exit 1' INT TERM
 
 # Run main function
 
-main “$@”
+main "$@"
+
