@@ -172,7 +172,6 @@ control 'filesystem-08' do
     its('owner') { should eq 'root' }
   end
 end
-end
 
 control 'filesystem-09' do
   impact 0.7

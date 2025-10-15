@@ -163,7 +163,6 @@ control 'user-08' do
       end
     end
 end
-end
 
 control 'user-09' do
   impact 0.8
