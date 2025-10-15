@@ -162,6 +162,7 @@ control 'user-08' do
         its('owner') { should eq user_info.user }
       end
     end
+  end  
 end
 
 control 'user-09' do
