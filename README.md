@@ -1,2 +1,2 @@
-# learning-inspec
-Learning InSpec
+learning-inspec
+# Learning InSpec
