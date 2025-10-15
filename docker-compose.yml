@@ -1,0 +1,274 @@
+version: ‘3.8’
+
+# Docker Compose Test Environment for InSpec Profile
+
+# This creates test containers that can be scanned with InSpec
+
+# Usage:
+
+# docker-compose up -d        # Start containers
+
+# docker-compose ps           # Check status
+
+# docker-compose down         # Stop and remove containers
+
+services:
+
+# Ubuntu 22.04 LTS - Latest stable release
+
+ubuntu-2204:
+image: ubuntu:22.04
+container_name: inspec-ubuntu-2204
+hostname: ubuntu-2204
+command: >
+/bin/bash -c “
+apt-get update &&
+DEBIAN_FRONTEND=noninteractive apt-get install -y
+openssh-server
+sudo
+auditd
+cron
+rsyslog
+net-tools
+iputils-ping
+vim
+curl &&
+mkdir -p /var/run/sshd &&
+useradd -m -s /bin/bash -G sudo testuser &&
+echo ‘testuser:testpass123’ | chpasswd &&
+echo ‘testuser ALL=(ALL) NOPASSWD:ALL’ >> /etc/sudoers &&
+sed -i ‘s/#PermitRootLogin prohibit-password/PermitRootLogin no/’ /etc/ssh/sshd_config &&
+sed -i ‘s/#PasswordAuthentication yes/PasswordAuthentication yes/’ /etc/ssh/sshd_config &&
+/usr/sbin/sshd -D
+“
+ports:
+- “2222:22”
+networks:
+inspec_test_net:
+ipv4_address: 172.25.0.10
+restart: unless-stopped
+
+# Ubuntu 20.04 LTS - Previous stable release
+
+ubuntu-2004:
+image: ubuntu:20.04
+container_name: inspec-ubuntu-2004
+hostname: ubuntu-2004
+command: >
+/bin/bash -c “
+apt-get update &&
+DEBIAN_FRONTEND=noninteractive apt-get install -y
+openssh-server
+sudo
+cron
+rsyslog
+net-tools &&
+mkdir -p /var/run/sshd &&
+useradd -m -s /bin/bash -G sudo testuser &&
+echo ‘testuser:testpass123’ | chpasswd &&
+echo ‘testuser ALL=(ALL) NOPASSWD:ALL’ >> /etc/sudoers &&
+/usr/sbin/sshd -D
+“
+ports:
+- “2223:22”
+networks:
+inspec_test_net:
+ipv4_address: 172.25.0.11
+restart: unless-stopped
+
+# CentOS Stream 8 - RHEL-based testing
+
+centos-8:
+image: quay.io/centos/centos:stream8
+container_name: inspec-centos-8
+hostname: centos-8
+command: >
+/bin/bash -c “
+yum install -y
+openssh-server
+sudo
+cronie
+rsyslog
+net-tools &&
+ssh-keygen -A &&
+useradd -m -s /bin/bash testuser &&
+echo ‘testuser:testpass123’ | chpasswd &&
+echo ‘testuser ALL=(ALL) NOPASSWD:ALL’ >> /etc/sudoers &&
+/usr/sbin/sshd -D
+“
+ports:
+- “2224:22”
+networks:
+inspec_test_net:
+ipv4_address: 172.25.0.12
+restart: unless-stopped
+
+# Debian 11 - Alternative Debian-based system
+
+debian-11:
+image: debian:11
+container_name: inspec-debian-11
+hostname: debian-11
+command: >
+/bin/bash -c “
+apt-get update &&
+DEBIAN_FRONTEND=noninteractive apt-get install -y
+openssh-server
+sudo
+cron
+rsyslog &&
+mkdir -p /var/run/sshd &&
+useradd -m -s /bin/bash -G sudo testuser &&
+echo ‘testuser:testpass123’ | chpasswd &&
+echo ‘testuser ALL=(ALL) NOPASSWD:ALL’ >> /etc/sudoers &&
+/usr/sbin/sshd -D
+“
+ports:
+- “2225:22”
+networks:
+inspec_test_net:
+ipv4_address: 172.25.0.13
+restart: unless-stopped
+
+# Secure Baseline - Pre-hardened system for comparison
+
+secure-baseline:
+image: ubuntu:22.04
+container_name: inspec-secure-baseline
+hostname: secure-baseline
+command: >
+/bin/bash -c “
+apt-get update &&
+DEBIAN_FRONTEND=noninteractive apt-get install -y
+openssh-server
+sudo
+auditd
+fail2ban
+ufw
+cron
+rsyslog &&
+mkdir -p /var/run/sshd &&
+useradd -m -s /bin/bash -G sudo secureuser &&
+echo ‘secureuser:SecurePass123!’ | chpasswd &&
+echo ‘secureuser ALL=(ALL) NOPASSWD:ALL’ >> /etc/sudoers &&
+sed -i ‘s/#PermitRootLogin prohibit-password/PermitRootLogin no/’ /etc/ssh/sshd_config &&
+sed -i ‘s/#MaxAuthTries 6/MaxAuthTries 3/’ /etc/ssh/sshd_config &&
+sed -i ‘s/#ClientAliveInterval 0/ClientAliveInterval 300/’ /etc/ssh/sshd_config &&
+sed -i ‘s/#ClientAliveCountMax 3/ClientAliveCountMax 2/’ /etc/ssh/sshd_config &&
+sed -i ‘s/X11Forwarding yes/X11Forwarding no/’ /etc/ssh/sshd_config &&
+echo ‘Protocol 2’ >> /etc/ssh/sshd_config &&
+chmod 600 /etc/ssh/ssh_host_**key &&
+chmod 644 /etc/ssh/ssh_host**_key.pub &&
+/usr/sbin/sshd -D
+“
+ports:
+- “2226:22”
+networks:
+inspec_test_net:
+ipv4_address: 172.25.0.14
+restart: unless-stopped
+
+networks:
+inspec_test_net:
+driver: bridge
+ipam:
+config:
+- subnet: 172.25.0.0/24
+
+# Testing Instructions:
+
+# 
+
+# 1. Start all containers:
+
+# docker-compose up -d
+
+# 
+
+# 2. Verify containers are running:
+
+# docker-compose ps
+
+# 
+
+# 3. Test against Ubuntu 22.04:
+
+# inspec exec . -t ssh://testuser@localhost:2222 –password testpass123
+
+# 
+
+# 4. Test against CentOS 8:
+
+# inspec exec . -t ssh://testuser@localhost:2224 –password testpass123
+
+# 
+
+# 5. Test against secure baseline (should pass most controls):
+
+# inspec exec . -t ssh://secureuser@localhost:2226 –password SecurePass123!
+
+# 
+
+# 6. Test using Docker transport:
+
+# inspec exec . -t docker://inspec-ubuntu-2204
+
+# 
+
+# 7. Generate HTML report:
+
+# inspec exec . -t ssh://testuser@localhost:2222 –password testpass123 \
+
+# –reporter html:reports/ubuntu-2204-report.html
+
+# 
+
+# 8. Test all environments:
+
+# ./test-all-environments.sh
+
+# 
+
+# 9. Stop and remove all containers:
+
+# docker-compose down
+
+# 
+
+# 10. View logs from specific container:
+
+# docker-compose logs ubuntu-2204
+
+# Credentials:
+
+# - Default containers: testuser / testpass123
+
+# - Secure baseline: secureuser / SecurePass123!
+
+# Ports:
+
+# - Ubuntu 22.04: 2222
+
+# - Ubuntu 20.04: 2223
+
+# - CentOS 8: 2224
+
+# - Debian 11: 2225
+
+# - Secure Baseline: 2226
+
+# Network:
+
+# All containers are on 172.25.0.0/24 network
+
+# Can communicate with each other using hostnames or IPs
+
+# Tips:
+
+# - Use docker-compose logs -f [service] to follow logs
+
+# - Use docker exec -it [container] bash to access shell
+
+# - Containers persist until explicitly removed
+
+# - Data is ephemeral - changes lost on restart
