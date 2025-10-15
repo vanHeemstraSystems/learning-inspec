@@ -26,7 +26,6 @@ control 'app-01' do
     its(['live-restore']) { should cmp true }
   end
 end
-end
 
 control 'app-02' do
   impact 0.9
@@ -379,7 +378,6 @@ control 'app-16' do
     its('content') { should match(/[sshd]/) }
   end
 end
-end
 
 control 'app-17' do
   impact 0.7
@@ -422,7 +420,6 @@ control 'app-18' do
   describe file('/etc/environment') do
     it { should_not be_readable.by('others') }
   end
-end
 end
 
 control 'app-19' do
