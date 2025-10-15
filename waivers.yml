@@ -10,132 +10,132 @@
 
 # - Controls that don’t apply to your infrastructure
 
-# 
+#
 
-# Usage: inspec exec . –waiver-file waivers.yml
+# Usage: inspec exec . --waiver-file waivers.yml
 
 # Example: Development environment may allow root SSH for convenience
 
 filesystem-04:
-expiration_date: 2025-12-31
-run: false
-justification: |
-Development environment only - SSH keys are for testing purposes.
-Root login via SSH is acceptable in isolated dev environment.
-This exception is approved by Security Team (Ticket: SEC-2025-001)
-approver: “Security Team Lead - John Doe”
+  expiration_date: 2025-12-31
+  run: false
+  justification: |
+    Development environment only - SSH keys are for testing purposes.
+    Root login via SSH is acceptable in isolated dev environment.
+    This exception is approved by Security Team (Ticket: SEC-2025-001)
+  approver: “Security Team Lead - John Doe”
 
 # Example: Docker not installed on all servers
 
 app-01:
-run: false
-justification: |
-This server does not run Docker containers.
-Control is not applicable to this infrastructure.
-approver: “Infrastructure Team - Jane Smith”
+  run: false
+  justification: |
+    This server does not run Docker containers.
+    Control is not applicable to this infrastructure.
+  approver: “Infrastructure Team - Jane Smith”
 
 app-02:
-run: false
-justification: “Docker not installed - control not applicable”
-approver: “Infrastructure Team - Jane Smith”
+  run: false
+  justification: “Docker not installed - control not applicable”
+  approver: “Infrastructure Team - Jane Smith”
 
 # Example: Custom SSH port for security through obscurity
 
 network-14:
-expiration_date: 2026-01-31
-run: true  # Still run the control but allow failure
-justification: |
-SSH is configured on port 2222 instead of 22 for additional security.
-This is a compensating control approved by security architecture.
-Standard SSH port 22 is blocked at firewall level.
-approver: “Security Architect - Willem van Heemstra”
+  expiration_date: 2026-01-31
+  run: true  # Still run the control but allow failure
+  justification: |
+    SSH is configured on port 2222 instead of 22 for additional security.
+    This is a compensating control approved by security architecture.
+    Standard SSH port 22 is blocked at firewall level.
+  approver: “Security Architect - Willem van Heemstra”
 
 # Example: Legacy application requires FTP
 
 service-11:
-expiration_date: 2025-06-30
-run: false
-justification: |
-FTP service required for legacy application integration.
-Migration to SFTP planned for Q2 2025 (Project: LEGACY-MIGRATE-001)
-FTP is restricted to internal network only via firewall rules.
-Risk accepted by Business Owner and CISO.
-approver: “CISO - Security Leadership”
+  expiration_date: 2025-06-30
+  run: false
+  justification: |
+    FTP service required for legacy application integration.
+    Migration to SFTP planned for Q2 2025 (Project: LEGACY-MIGRATE-001)
+    FTP is restricted to internal network only via firewall rules.
+    Risk accepted by Business Owner and CISO.
+  approver: “CISO - Security Leadership”
 
 # Example: Web server intentionally exposed
 
 app-07:
-run: false
-justification: |
-Directory listing is enabled for public documentation repository.
-This is an intentional feature, not a security issue.
-No sensitive data is exposed in this directory.
-approver: “Application Owner - Documentation Team”
+  run: false
+  justification: |
+    Directory listing is enabled for public documentation repository.
+    This is an intentional feature, not a security issue.
+    No sensitive data is exposed in this directory.
+  approver: “Application Owner - Documentation Team”
 
 # Example: Development server with relaxed password policy
 
 user-04:
-expiration_date: 2025-12-31
-run: false
-justification: |
-Development environment uses shorter password expiration (180 days).
-This reduces friction for developers while maintaining security.
-Production systems still enforce 90-day expiration.
-approver: “Development Manager - Dev Team Lead”
+  expiration_date: 2025-12-31
+  run: false
+  justification: |
+    Development environment uses shorter password expiration (180 days).
+    This reduces friction for developers while maintaining security.
+    Production systems still enforce 90-day expiration.
+  approver: “Development Manager - Dev Team Lead”
 
 # Example: Container workload - different security model
 
 filesystem-07:
-run: false
-justification: |
-Running as containerized workload - filesystem is ephemeral.
-/tmp mounting options controlled by container runtime.
-Security validated through container security scanning.
-approver: “Container Platform Team”
+  run: false
+  justification: |
+    Running as containerized workload - filesystem is ephemeral.
+    /tmp mounting options controlled by container runtime.
+    Security validated through container security scanning.
+  approver: “Container Platform Team”
 
 # Example: Cloud environment - managed firewall
 
 service-19:
-run: false
-justification: |
-Cloud environment using managed firewall service (AWS Security Groups).
-Host-based firewall not required due to network-level controls.
-Compliance validated through cloud security posture management.
-approver: “Cloud Security Team”
+  run: false
+  justification: |
+    Cloud environment using managed firewall service (AWS Security Groups).
+    Host-based firewall not required due to network-level controls.
+    Compliance validated through cloud security posture management.
+  approver: “Cloud Security Team”
 
 # Example: Special network configuration
 
 network-01:
-run: false
-justification: |
-This server acts as a NAT gateway and requires IP forwarding.
-This is necessary for the infrastructure architecture.
-Approved as part of network design review.
-approver: “Network Architecture - Senior Network Engineer”
+  run: false
+  justification: |
+    This server acts as a NAT gateway and requires IP forwarding.
+    This is necessary for the infrastructure architecture.
+    Approved as part of network design review.
+  approver: “Network Architecture - Senior Network Engineer”
 
 # Example: Third-party appliance with custom configuration
 
 user-03:
-expiration_date: 2025-09-30
-run: false
-justification: |
-Third-party security appliance requires direct root login.
-Vendor does not support sudo-based access model.
-Access restricted to authorized security team members only.
-Additional monitoring and alerting configured for root logins.
-Vendor working on sudo support for future release.
-approver: “Security Operations Manager”
+  expiration_date: 2025-09-30
+  run: false
+  justification: |
+    Third-party security appliance requires direct root login.
+    Vendor does not support sudo-based access model.
+    Access restricted to authorized security team members only.
+    Additional monitoring and alerting configured for root logins.
+    Vendor working on sudo support for future release.
+  approver: “Security Operations Manager”
 
 # Example: Specialized monitoring system
 
 app-17:
-run: false
-justification: |
-Monitoring database (Prometheus) intentionally listens on 0.0.0.0
-for collection from distributed monitoring agents.
-Access controlled via authentication tokens and firewall rules.
-This is required for the monitoring architecture.
-approver: “Monitoring Team Lead”
+  run: false
+  justification: |
+    Monitoring database (Prometheus) intentionally listens on 0.0.0.0
+    for collection from distributed monitoring agents.
+    Access controlled via authentication tokens and firewall rules.
+    This is required for the monitoring architecture.
+  approver: “Monitoring Team Lead”
 
 # Template for creating new waivers
 
