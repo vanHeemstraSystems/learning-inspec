@@ -1,0 +1,95 @@
+# InSpec Input File
+
+# Use this file to customize the security baseline for your environment
+
+# Usage: inspec exec . –input-file inputs.yml
+
+# SSH Configuration
+
+allowed_ssh_port: 22  # The port SSH should listen on
+
+# Critical Services (must be running)
+
+critical_services:
+
+- sshd
+- systemd
+- auditd
+- firewalld  # or ufw depending on your distro
+
+# Prohibited Services (should NOT be running)
+
+prohibited_services:
+
+- telnet
+- rsh
+- rlogin
+- vsftpd
+- ftpd
+
+# Password Policy
+
+max_password_age: 90  # Maximum days before password expires
+min_password_length: 12  # Minimum password length
+
+# Network Security
+
+allowed_open_ports:
+
+- 22    # SSH
+- 80    # HTTP (if running web server)
+- 443   # HTTPS (if running web server)
+
+# Add any additional ports your services require
+
+# Environment Type
+
+environment: production  # Options: development, staging, production
+
+# Custom settings for different environments
+
+# These demonstrate how inputs can be used for environment-specific configs
+
+# Development Environment Example
+
+# max_password_age: 180
+
+# allowed_open_ports:
+
+# - 22
+
+# - 80
+
+# - 443
+
+# - 3000  # Development server
+
+# - 8080  # Additional dev services
+
+# Staging Environment Example
+
+# max_password_age: 120
+
+# critical_services:
+
+# - sshd
+
+# - systemd
+
+# - auditd
+
+# Production Environment (strictest)
+
+# max_password_age: 60
+
+# critical_services:
+
+# - sshd
+
+# - systemd
+
+# - auditd
+
+# - firewalld
+
+# - fail2ban
