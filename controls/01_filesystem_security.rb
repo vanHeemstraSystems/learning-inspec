@@ -167,9 +167,10 @@ control 'filesystem-08' do
 # Check sudoers.d directory if it exists
 
   if directory('/etc/sudoers.d').exist?
-  describe directory('/etc/sudoers.d') do
-    its('mode') { should cmp '0750' }
-    its('owner') { should eq 'root' }
+    describe directory('/etc/sudoers.d') do
+      its('mode') { should cmp '0750' }
+      its('owner') { should eq 'root' }
+    end  
   end
 end
 
@@ -215,6 +216,5 @@ control 'filesystem-10' do
       it { should_not be_readable.by('others') }
       its('owner') { should be_in ['root', 'syslog'] }
     end
-
-  end
+  end  
 end
