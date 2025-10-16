@@ -21,9 +21,10 @@ control 'app-01' do
 # Check Docker daemon configuration
 
   if file('/etc/docker/daemon.json').exist?
-  describe json('/etc/docker/daemon.json') do
-    its(['icc']) { should cmp false }
-    its(['live-restore']) { should cmp true }
+    describe json('/etc/docker/daemon.json') do
+      its(['icc']) { should cmp false }
+      its(['live-restore']) { should cmp true }
+    end
   end
 end
 
@@ -125,12 +126,12 @@ control 'app-06' do
 # Check Nginx configuration if installed
 
   if package('nginx').installed? && file('/etc/nginx/nginx.conf').exist?
-  describe file('/etc/nginx/nginx.conf') do
-    its('content') { should match(/add_header X-Frame-Options/) }
-    its('content') { should match(/add_header X-Content-Type-Options/) }
-    its('content') { should match(/add_header X-XSS-Protection/) }
+    describe file('/etc/nginx/nginx.conf') do
+      its('content') { should match(/add_header X-Frame-Options/) }
+      its('content') { should match(/add_header X-Content-Type-Options/) }
+      its('content') { should match(/add_header X-XSS-Protection/) }
+    end
   end
-end
 
 # Check Apache configuration if installed
 
@@ -153,10 +154,10 @@ control 'app-07' do
 # Check Nginx configuration
 
   if package('nginx').installed? && file('/etc/nginx/nginx.conf').exist?
-  describe file('/etc/nginx/nginx.conf') do
-    its('content') { should match(/autoindex off/) }
+    describe file('/etc/nginx/nginx.conf') do
+      its('content') { should match(/autoindex off/) }
+    end
   end
-end
 
 # Check Apache configuration
 
@@ -183,10 +184,10 @@ control 'app-08' do
 # Check Nginx
 
   if package('nginx').installed?
-  describe processes('nginx') do
-    its('users') { should_not include 'root' }
+    describe processes('nginx') do
+      its('users') { should_not include 'root' }
+    end
   end
-end
 
 # Check Apache
 
@@ -223,7 +224,6 @@ control 'app-09' do
       its('content') { should_not match(/Welcome to nginx/) }
       its('content') { should_not match(/Apache.*Test Page/) }
     end
-
   end
 end
 
@@ -374,9 +374,10 @@ control 'app-16' do
   end
 
   if file('/etc/fail2ban/jail.local').exist?
-  describe file('/etc/fail2ban/jail.local') do
-    its('content') { should match(/[sshd]/) }
-  end
+    describe file('/etc/fail2ban/jail.local') do
+      its('content') { should match(/[sshd]/) }
+    end
+  end  
 end
 
 control 'app-17' do
@@ -417,9 +418,10 @@ control 'app-18' do
 # This is a simplified check - in production you would scan more thoroughly
 
   if file('/etc/environment').exist?
-  describe file('/etc/environment') do
-    it { should_not be_readable.by('others') }
-  end
+    describe file('/etc/environment') do
+      it { should_not be_readable.by('others') }
+    end
+  end  
 end
 
 control 'app-19' do
